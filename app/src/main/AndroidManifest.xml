@@ -23,9 +23,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="authorization"
-                    android:scheme="https" />
+                <data android:scheme="pdk4978570631126728221" />
             </intent-filter>
         </activity>
     </application>
