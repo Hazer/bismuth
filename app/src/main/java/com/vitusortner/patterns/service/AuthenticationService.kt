@@ -1,10 +1,12 @@
-package com.vitusortner.patterns
+package com.vitusortner.patterns.service
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
+import com.vitusortner.patterns.Constants
 import com.vitusortner.patterns.util.Logger
 
 class AuthenticationService {
@@ -20,6 +22,8 @@ class AuthenticationService {
     private val EXTRA_RESULT = "PDKCLIENT_EXTRA_RESULT"
 
     private val REQUEST_CODE = 8772
+
+    private val PREFS_TOKEN = "prefs_token"
 
     private val PERMISSION_READ_PUBLIC = "read_public"
     private val PERMISSION_WRITE_PUBLIC = "write_public"
@@ -89,6 +93,7 @@ class AuthenticationService {
     private fun onOauthResponse(result: String) {
         val token = Uri.parse(result).getQueryParameter("access_token")
         log.i("Token: $token")
+//        save()
     }
 
     private fun authIntent(permissions: List<String>): Intent {
@@ -102,5 +107,17 @@ class AuthenticationService {
     private fun pinterestInstalled(context: Context): Boolean {
         val info = context.packageManager.getPackageInfo(PINTEREST_PACKAGE, 0)
         return info.versionCode >= 16 // Pinterest verion must be higher than 16
+    }
+
+    private fun save(context: Context, token: String) {
+        val prefs = (context as Activity).getPreferences(Context.MODE_PRIVATE)
+        prefs.edit { putString(PREFS_TOKEN, token) }
+    }
+
+    private fun SharedPreferences.edit(action: SharedPreferences.Editor.() -> Unit) {
+        edit().apply {
+            action()
+            apply()
+        }
     }
 }
