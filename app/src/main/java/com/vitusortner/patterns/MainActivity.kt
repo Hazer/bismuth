@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.service.AuthenticationService
 import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
+import kotlinx.android.synthetic.main.activity_main.recyclerView
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,12 +22,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPrefs
     private lateinit var authService: AuthenticationService
 
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewAdapter: PinsAdapter
+
+    //
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         sharedPrefs = SharedPrefs(this)
         authService = AuthenticationService(this, sharedPrefs)
+
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = PinsAdapter()
+
+        recyclerView.apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
 
         authService.onConnect()
     }
@@ -57,8 +73,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         launchAsync {
-            val images = apiClient.images(token.value).await()
-            log.i("Fetched images: ${images.body()}")
+            val response =
+                apiClient.images(token.value).await().apply { log.i("Response: ${body()}") }
+
+            val images = response.body() ?: return@launchAsync
+
+            viewAdapter.items = images
         }
     }
 
