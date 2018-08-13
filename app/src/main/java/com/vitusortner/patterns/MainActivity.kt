@@ -1,12 +1,12 @@
 package com.vitusortner.patterns
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.service.AuthenticationService
 import com.vitusortner.patterns.util.Logger
-import kotlinx.android.synthetic.main.activity_main.*
+import com.vitusortner.patterns.util.SharedPrefs
+import kotlinx.android.synthetic.main.activity_main.button
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,27 +14,21 @@ class MainActivity : AppCompatActivity() {
 
     private val apiClient = ApiClient.instance
 
+    private lateinit var sharedPrefs: SharedPrefs
     private lateinit var authService: AuthenticationService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        authService = AuthenticationService()
+        sharedPrefs = SharedPrefs(this)
+        authService = AuthenticationService(this, sharedPrefs)
 
-        authService.onConnect(this)
+        authService.onConnect()
 
         button.setOnClickListener {
-            authService.login(this)
+            authService.login()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        log.d("onActivityResult($requestCode, $resultCode, $data)")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        data ?: return
-        authService.onOauthResponse(requestCode, resultCode, data)
     }
 
 //    private fun authenticate(code: String) {
