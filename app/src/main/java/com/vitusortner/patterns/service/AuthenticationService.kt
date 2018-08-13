@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.vitusortner.patterns.Constants
+import com.vitusortner.patterns.Token
 import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
 
@@ -54,7 +55,7 @@ class AuthenticationService(private val context: Context, private val sharedPref
         val token = Uri.parse(result).getQueryParameter("access_token")
         log.d("Token: $token")
 
-        sharedPrefs.token = token
+        sharedPrefs.token = Token(token)
 
         log.d("Saved token: ${sharedPrefs.token}$")
     }
