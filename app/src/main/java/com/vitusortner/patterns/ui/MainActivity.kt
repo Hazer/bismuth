@@ -1,13 +1,17 @@
-package com.vitusortner.patterns
+package com.vitusortner.patterns.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vitusortner.patterns.R
 import com.vitusortner.patterns.networking.ApiClient
+import com.vitusortner.patterns.observe
 import com.vitusortner.patterns.service.AuthenticationService
+import com.vitusortner.patterns.ui.pins.PinsAdapter
+import com.vitusortner.patterns.ui.pins.PinsViewModel
 import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.recyclerView
@@ -25,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: PinsAdapter
 
+    private lateinit var viewModel: PinsViewModel
+
     //
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +46,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
+        viewModel = PinsViewModel.get(this, apiClient, sharedPrefs)
+
         authService.onConnect()
+
+        viewModel.pins.observe(this) { adapter.items = it }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,28 +65,12 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.refresh -> {
-                refresh()
+                viewModel.fetchPins()
                 true
             }
             else -> {
                 super.onOptionsItemSelected(item)
             }
-        }
-    }
-
-    private fun refresh() {
-        val token = sharedPrefs.token ?: run {
-            log.i("Not logged in!")
-            return
-        }
-
-        launchAsync {
-            val response =
-                apiClient.images(token.value).await().apply { log.i("Response: ${body()}") }
-
-            val images = response.body() ?: return@launchAsync
-
-            adapter.items = images
         }
     }
 
