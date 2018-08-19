@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vitusortner.patterns.networking.model.I
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.cell_pin.view.imageView
 
 class PinsAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -36,4 +37,5 @@ class PinsAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 }
 
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+class ViewHolder(override val containerView: View) :
+    RecyclerView.ViewHolder(containerView), LayoutContainer
