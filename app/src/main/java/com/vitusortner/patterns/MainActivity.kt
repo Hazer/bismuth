@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPrefs
     private lateinit var authService: AuthenticationService
 
-    private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var viewAdapter: PinsAdapter
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var adapter: PinsAdapter
 
     //
 
@@ -34,13 +34,11 @@ class MainActivity : AppCompatActivity() {
         sharedPrefs = SharedPrefs(this)
         authService = AuthenticationService(this, sharedPrefs)
 
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = PinsAdapter()
+        layoutManager = LinearLayoutManager(this)
+        adapter = PinsAdapter()
 
-        recyclerView.apply {
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
 
         authService.onConnect()
     }
@@ -78,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
             val images = response.body() ?: return@launchAsync
 
-            viewAdapter.items = images
+            adapter.items = images
         }
     }
 
