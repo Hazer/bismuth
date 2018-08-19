@@ -6,13 +6,14 @@ class Logger<T>(javaClass: Class<T>) {
 
     private val tag = "${javaClass.simpleName}::class"
 
-    fun i(message: String) = Log.i(tag, message)
+    fun i(message: String, throwable: Throwable? = null) = Log.i(tag, message, throwable)
 
-    fun d(message: String) = Log.d(tag, message)
+    fun d(message: String, throwable: Throwable? = null) = Log.d(tag, message, throwable)
 
-    fun e(message: String) = Log.e(tag, message)
+    fun e(message: String, throwable: Throwable? = null) = Log.e(tag, message, throwable)
 
-    fun v(message: String) = Log.v(tag, message)
+    fun v(message: String, throwable: Throwable? = null) = Log.v(tag, message, throwable)
 
-    fun w(message: String) = Log.w(tag, message)
+    fun w(message: String, throwable: Throwable? = null) = Log.w(tag, message, throwable)
+
 }
