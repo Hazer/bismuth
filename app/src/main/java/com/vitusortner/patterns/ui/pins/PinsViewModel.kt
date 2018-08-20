@@ -10,8 +10,8 @@ import com.vitusortner.patterns.await
 import com.vitusortner.patterns.launchAsync
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.networking.model.Image
-import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
+import com.vitusortner.patterns.util.logger
 import kotlinx.coroutines.experimental.Job
 
 class PinsViewModel(
@@ -19,7 +19,7 @@ class PinsViewModel(
     private val sharedPrefs: SharedPrefs
 ) : ViewModel() {
 
-    private val log = Logger(javaClass)
+    private val log by logger()
 
     private val job = Job()
 
@@ -72,18 +72,13 @@ class PinsViewModel(
 
 }
 
-//sealed class Response<T> {
-//    data class Loading<T>(val loading: Boolean) : Response<T>()
-//    data class Result<T>(val items: T)
-//    data class Error(val throwable: Throwable)
-//}
-
-class PinsViewModelFactory(
+private class PinsViewModelFactory(
     private val apiClient: ApiClient,
     private val sharedPrefs: SharedPrefs
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
         return PinsViewModel(apiClient, sharedPrefs) as T
     }
 }

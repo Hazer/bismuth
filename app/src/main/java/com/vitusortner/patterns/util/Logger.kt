@@ -17,3 +17,5 @@ class Logger<T>(javaClass: Class<T>) {
     fun w(message: String, throwable: Throwable? = null) = Log.w(tag, message, throwable)
 
 }
+
+fun <T : Any> T.logger() = lazy { Logger(javaClass) }
