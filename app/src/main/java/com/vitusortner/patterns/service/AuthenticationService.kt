@@ -53,11 +53,9 @@ class AuthenticationService(private val context: Context, private val sharedPref
 
     private fun onOauthResponse(result: String) {
         val token = Uri.parse(result).getQueryParameter("access_token") ?: return
-        log.d("Token: $token")
+        log.d("Received token: $token")
 
         sharedPrefs.token = Token(token)
-
-        log.d("Saved token: ${sharedPrefs.token}$")
     }
 
 }

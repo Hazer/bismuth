@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         authService.onConnect()
 
-        viewModel.pins.observe(this) { adapter.items = it }
+        viewModel.pins.observe(this, adapter::submitList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
