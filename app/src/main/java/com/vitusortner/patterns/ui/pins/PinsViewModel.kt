@@ -14,6 +14,10 @@ import com.vitusortner.patterns.util.SharedPrefs
 import com.vitusortner.patterns.util.logger
 import kotlinx.coroutines.experimental.Job
 
+/**
+ * [ViewModel] which provides pins.
+ * Constructor should only be used when testing. Otherwise use static [get].
+ */
 class PinsViewModel(
     private val apiClient: ApiClient,
     private val sharedPrefs: SharedPrefs
@@ -72,12 +76,13 @@ class PinsViewModel(
 
 }
 
+/** Factory for [PinsViewModel] */
 private class PinsViewModelFactory(
     private val apiClient: ApiClient,
     private val sharedPrefs: SharedPrefs
 ) : ViewModelProvider.NewInstanceFactory() {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return PinsViewModel(apiClient, sharedPrefs) as T
     }
