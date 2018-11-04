@@ -11,4 +11,4 @@ import androidx.lifecycle.Observer
 fun <T> LiveData<T>.observe(owner: LifecycleOwner, block: (T) -> Unit) =
     observe(owner, Observer { block(it) })
 
-data class Token(val value: String) // TODO use inline class
+inline class Token(val value: String)
