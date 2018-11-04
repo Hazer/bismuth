@@ -1,18 +1,14 @@
 package com.vitusortner.patterns.ui.pins
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.vitusortner.patterns.await
-import com.vitusortner.patterns.launchAsync
+import androidx.lifecycle.*
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.networking.model.Image
+import com.vitusortner.patterns.ui.pins.PinsViewModel.Companion.get
 import com.vitusortner.patterns.util.SharedPrefs
 import com.vitusortner.patterns.util.logger
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * [ViewModel] which provides pins.
@@ -21,13 +17,14 @@ import kotlinx.coroutines.experimental.Job
 class PinsViewModel(
     private val apiClient: ApiClient,
     private val sharedPrefs: SharedPrefs
-) : ViewModel() {
-
-    private val log by logger()
+) : ViewModel(), CoroutineScope {
 
     private val job = Job()
 
-    //
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + job
+
+    private val log by logger()
 
     private val _pins = MutableLiveData<List<Image>>()
     val pins: LiveData<List<Image>>
@@ -39,27 +36,24 @@ class PinsViewModel(
             return
         }
 
-        launchAsync(job) {
+        launch {
             try {
-                val response =
-                    apiClient.images(token.value).await()
-                val images = response.body()?.map { it.image.original } ?: return@launchAsync
+                val response = async { apiClient.images(token.value).execute() }.await()
+                val images = response.body()?.map { it.image.original } ?: return@launch
 
-                _pins.value = images
+                withContext(Dispatchers.Main) {
+                    _pins.value = images
+                }
             } catch (error: Throwable) {
                 log.w("Error occured while fetching images.", error)
             }
         }
     }
 
-    //
-
     override fun onCleared() {
-        super.onCleared()
         job.cancel()
+        super.onCleared()
     }
-
-    //
 
     companion object {
 
