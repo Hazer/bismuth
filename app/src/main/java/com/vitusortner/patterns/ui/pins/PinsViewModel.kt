@@ -38,8 +38,8 @@ class PinsViewModel(
 
         launch {
             try {
-                val response = async { apiClient.images(token.value).execute() }.await()
-                val images = response.body()?.map { it.image.original } ?: return@launch
+                val response = apiClient.images(token.value).await()
+                val images = response.map { it.image.original }
 
                 withContext(Dispatchers.Main) {
                     _pins.value = images

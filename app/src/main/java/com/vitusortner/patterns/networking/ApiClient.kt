@@ -1,9 +1,10 @@
 package com.vitusortner.patterns.networking
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.serjltt.moshi.adapters.Wrapped
 import com.squareup.moshi.Moshi
 import com.vitusortner.patterns.networking.model.I
-import retrofit2.Call
+import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -13,7 +14,7 @@ interface ApiClient {
 
     @GET("me/pins/?fields=image")
     @Wrapped(path = ["data"])
-    fun images(@Query("access_token") token: String): Call<List<I>>
+    fun images(@Query("access_token") token: String): Deferred<List<I>>
 
     companion object {
 
@@ -31,6 +32,7 @@ interface ApiClient {
             Retrofit.Builder()
                 .baseUrl("https://api.pinterest.com/v1/")
 //                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
         }
