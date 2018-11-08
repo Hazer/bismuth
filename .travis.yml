@@ -1,5 +1,5 @@
 before_install:
-- yes | sdkmanager --licenses
+- yes | sdkmanager "build-tools;27.0.3"
 
 language: android
 android:
@@ -7,9 +7,10 @@ android:
   # use the latest revision of Android SDK Tools
   - tools
   - platform-tools
+  - tools
 
   # BuildTools version used by project
-  - build-tools-28.0.3
+  #  - build-tools-28.0.3
 
   # SDK version to compile project
   - android-28
