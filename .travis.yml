@@ -6,7 +6,7 @@ android:
   - platform-tools
 
   # BuildTools version used by project
-  - build-tools-27.0.3
+  - build-tools-26.1.1
 
   # SDK version to compile project
   - android-28
