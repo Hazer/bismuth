@@ -18,4 +18,5 @@ class Logger<T>(javaClass: Class<T>) {
 
 }
 
-fun <T : Any> T.logger() = lazy { Logger(javaClass) }
+@Suppress("FunctionName")
+fun <T : Any> T.Logger() = lazy { Logger(javaClass) }

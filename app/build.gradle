@@ -2,12 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
-}
-
 androidExtensions {
     experimental = true
 }
@@ -59,6 +53,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    testImplementation 'io.mockk:mockk:1.8.12.kotlin13'
+    testImplementation 'org.amshove.kluent:kluent-android:1.42'
 
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

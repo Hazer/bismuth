@@ -12,13 +12,14 @@ import com.vitusortner.patterns.observe
 import com.vitusortner.patterns.service.AuthenticationService
 import com.vitusortner.patterns.ui.pins.PinsAdapter
 import com.vitusortner.patterns.ui.pins.PinsViewModel
+import com.vitusortner.patterns.util.ActualPatternsDispatchers
+import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
-import com.vitusortner.patterns.util.logger
-import kotlinx.android.synthetic.main.activity_main.recyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val log by logger()
+    private val log by Logger()
 
     private val apiClient = ApiClient.instance
 
@@ -30,8 +31,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: PinsAdapter
 
     private lateinit var viewModel: PinsViewModel
-
-    //
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        viewModel = PinsViewModel.get(this, apiClient, sharedPrefs)
+        viewModel = PinsViewModel.get(this, apiClient, sharedPrefs, ActualPatternsDispatchers)
 
         authService.onConnect()
 

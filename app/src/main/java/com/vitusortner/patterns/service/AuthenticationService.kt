@@ -6,12 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import com.vitusortner.patterns.Constants
 import com.vitusortner.patterns.Token
+import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
-import com.vitusortner.patterns.util.logger
 
 class AuthenticationService(private val context: Context, private val sharedPrefs: SharedPrefs) {
 
-    private val log by logger()
+    private val log by Logger()
 
     private val URL =
         "https://api.pinterest.com/oauth/?" +
