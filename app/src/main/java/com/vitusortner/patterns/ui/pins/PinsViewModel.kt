@@ -1,10 +1,11 @@
 package com.vitusortner.patterns.ui.pins
 
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.networking.model.Image
-import com.vitusortner.patterns.ui.pins.PinsViewModel.Companion.get
+import com.vitusortner.patterns.ui.pins.PinsViewModel.Companion.invoke
 import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.PatternsDispatchers
 import com.vitusortner.patterns.util.SharedPrefs
@@ -16,9 +17,9 @@ import kotlin.coroutines.CoroutineContext
 
 /**
  * [ViewModel] which provides pins.
- * Constructor should only be used when testing. Otherwise use static [get].
+ * Constructor should only be used when testing. Otherwise use static [invoke].
  */
-class PinsViewModel(
+class PinsViewModel @VisibleForTesting constructor(
     private val apiClient: ApiClient,
     private val sharedPrefs: SharedPrefs,
     private val dispatchers: PatternsDispatchers
@@ -62,7 +63,7 @@ class PinsViewModel(
 
     companion object {
 
-        fun get(
+        operator fun invoke(
             activity: AppCompatActivity,
             apiClient: ApiClient,
             sharedPrefs: SharedPrefs,

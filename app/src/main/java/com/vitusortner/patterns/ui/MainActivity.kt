@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        viewModel = PinsViewModel.get(this, apiClient, sharedPrefs, ActualPatternsDispatchers)
+        viewModel = PinsViewModel(this, apiClient, sharedPrefs, ActualPatternsDispatchers)
 
         authService.onConnect()
 
