@@ -2,6 +2,7 @@ before_install:
 - yes | sdkmanager "build-tools;27.0.3"
 
 language: android
+
 android:
   components:
   # use the latest revision of Android SDK Tools
@@ -24,5 +25,15 @@ android:
 
   # Specify at least one system image,
   # if you need to run emulator(s) during your tests
-#  - sys-img-armeabi-v7a-android-26
-#  - sys-img-armeabi-v7a-android-17
+  # - sys-img-armeabi-v7a-android-26
+  # - sys-img-armeabi-v7a-android-17
+
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+  - $HOME/.android/build-cache
