@@ -5,18 +5,21 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.vitusortner.patterns.R
 import com.vitusortner.patterns.networking.ApiClient
+import com.vitusortner.patterns.networking.model.Image
 import com.vitusortner.patterns.observe
 import com.vitusortner.patterns.service.AuthenticationService
-import com.vitusortner.patterns.ui.pins.PinsAdapter
 import com.vitusortner.patterns.ui.pins.PinsViewModel
+import com.vitusortner.patterns.ui.pins._PinsAdaper
 import com.vitusortner.patterns.util.ActualPatternsDispatchers
+import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val log by Logger()
 
     private val apiClient = ApiClient.instance
 
@@ -24,8 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPrefs
     private lateinit var authService: AuthenticationService
 
-    private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var adapter: PinsAdapter
+    //    private lateinit var adapter: PinsAdapter
+//    private lateinit var adapter: _PinsAdaper
 
     private lateinit var viewModel: PinsViewModel
 
@@ -36,17 +39,35 @@ class MainActivity : AppCompatActivity() {
         sharedPrefs = SharedPrefs(this)
         authService = AuthenticationService(this, sharedPrefs)
 
-        layoutManager = LinearLayoutManager(this)
-        adapter = PinsAdapter()
+        //        adapter = PinsAdapter()
+        val adapter = _PinsAdaper()
 
-        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.setItemViewCacheSize(20)
+        recyclerView.isNestedScrollingEnabled = false
 
         viewModel = PinsViewModel(this, apiClient, sharedPrefs, ActualPatternsDispatchers)
 
         authService.onConnect()
 
-        viewModel.pins.observe(this, adapter::submitList)
+        val images = listOf(
+            "https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+            "https://images.pexels.com/photos/1576002/pexels-photo-1576002.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+            "https://images.pexels.com/photos/1580470/pexels-photo-1580470.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+        ).map { Image(url = it, width = 0, height = 0) }
+
+        val items = (0..30).map { images.random() }
+
+        adapter.items = items
+
+//        viewModel.pins.observe(this, adapter::submitList)
+        viewModel.pins.observe(this) {
+            log.d("Items: $it")
+            adapter.items = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

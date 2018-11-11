@@ -12,6 +12,39 @@ import com.vitusortner.patterns.networking.model.Image
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.cell_pin.view.*
 
+class _PinsAdaper : RecyclerView.Adapter<ViewHolder>() {
+
+    var items: List<Image> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cell_pin, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+
+        val url = item.url
+        val width = item.width
+        val height = item.height
+
+        if (url.isBlank()) return
+
+        Picasso.get()
+            .load(url)
+//            .fit()
+//            .centerCrop()
+            .into(holder.containerView.imageView)
+    }
+
+}
+
 class PinsAdapter : ListAdapter<Image, ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,11 +55,11 @@ class PinsAdapter : ListAdapter<Image, ViewHolder>(DIFF_CALLBACK) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val url = getItem(position).url
 
-        if (url.isNotBlank()) {
-            Picasso.get()
-                .load(url)
-                .into(holder.itemView.imageView)
-        }
+        if (url.isBlank()) return
+
+        Picasso.get()
+            .load(url)
+            .into(holder.itemView.imageView)
     }
 
 }
