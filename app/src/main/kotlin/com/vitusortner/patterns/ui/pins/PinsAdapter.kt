@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import com.vitusortner.patterns.R
 import com.vitusortner.patterns.networking.model.Image
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.cell_pin.view.imageView
+import kotlinx.android.synthetic.main.cell_pin.view.*
 
 class PinsAdapter : ListAdapter<Image, ViewHolder>(DIFF_CALLBACK) {
 
