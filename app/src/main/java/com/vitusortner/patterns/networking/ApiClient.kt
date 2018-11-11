@@ -18,7 +18,7 @@ interface ApiClient {
 
     companion object {
 
-        val instance by lazy {
+        val instance: ApiClient by lazy {
             retrofit.create(ApiClient::class.java)
         }
 

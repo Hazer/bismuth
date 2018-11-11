@@ -13,13 +13,10 @@ import com.vitusortner.patterns.service.AuthenticationService
 import com.vitusortner.patterns.ui.pins.PinsAdapter
 import com.vitusortner.patterns.ui.pins.PinsViewModel
 import com.vitusortner.patterns.util.ActualPatternsDispatchers
-import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private val log by Logger()
 
     private val apiClient = ApiClient.instance
 

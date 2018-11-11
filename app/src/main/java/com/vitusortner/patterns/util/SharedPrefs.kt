@@ -7,10 +7,11 @@ import com.vitusortner.patterns.Token
 
 /**
  * SharedPreferences wrapper to easily save and retrieve data from SharedPreferences.
- * Shouldn't be instanciated more often than once
+ * Shouldn't be instantiated more often than once
  */
 class SharedPrefs(context: Context) {
 
+    @Suppress("PrivatePropertyName")
     private val PREFS_TOKEN = "prefs_token"
 
     private val preferences = (context as Activity).getPreferences(Context.MODE_PRIVATE)
@@ -26,8 +27,6 @@ class SharedPrefs(context: Context) {
             val token = preferences.getString(PREFS_TOKEN, null) ?: return null
             return Token(token)
         }
-
-    //
 
     /**
      * Helper function to store data in SharedPreferences.

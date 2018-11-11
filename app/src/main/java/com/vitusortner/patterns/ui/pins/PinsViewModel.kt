@@ -51,7 +51,7 @@ class PinsViewModel @VisibleForTesting constructor(
                     _pins.value = images
                 }
             } catch (error: Throwable) {
-                log.w("Error occured while fetching images.", error)
+                log.w("Error occurred while fetching images.", error)
             }
         }
     }

@@ -13,14 +13,13 @@ class AuthenticationService(private val context: Context, private val sharedPref
 
     private val log by Logger()
 
+    @Suppress("PrivatePropertyName")
     private val URL =
         "https://api.pinterest.com/oauth/?" +
-            "response_type=token&" +
-            "redirect_uri=pdk${Constants.APP_ID}://&" +
-            "client_id=${Constants.APP_ID}&" +
-            "scope=read_public,write_public"
-
-    //
+                "response_type=token&" +
+                "redirect_uri=pdk${Constants.APP_ID}://&" +
+                "client_id=${Constants.APP_ID}&" +
+                "scope=read_public,write_public"
 
     /**
      * Call function to initiate login.
@@ -39,8 +38,6 @@ class AuthenticationService(private val context: Context, private val sharedPref
             onOauthResponse(result)
         }
     }
-
-    //
 
     private fun initiateWebLogin() {
         val uri = Uri.parse(URL)

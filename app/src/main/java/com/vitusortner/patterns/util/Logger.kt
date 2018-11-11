@@ -2,6 +2,7 @@ package com.vitusortner.patterns.util
 
 import android.util.Log
 
+@Suppress("unused")
 class Logger<T>(javaClass: Class<T>) {
 
     private val tag = "${javaClass.simpleName}::class"
