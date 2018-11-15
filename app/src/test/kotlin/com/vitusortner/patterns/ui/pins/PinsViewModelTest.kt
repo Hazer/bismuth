@@ -1,16 +1,19 @@
-package com.vitusortner.patterns
+package com.vitusortner.patterns.ui.pins
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.vitusortner.patterns.LiveDataTestUtil
+import com.vitusortner.patterns.TestDispatchers
+import com.vitusortner.patterns.Token
 import com.vitusortner.patterns.networking.ApiClient
 import com.vitusortner.patterns.networking.Response
 import com.vitusortner.patterns.networking.model.I
 import com.vitusortner.patterns.networking.model.Image
 import com.vitusortner.patterns.networking.model.O
-import com.vitusortner.patterns.ui.pins.PinsViewModel
 import com.vitusortner.patterns.util.SharedPrefs
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
@@ -39,6 +42,7 @@ class PinsViewModelTest {
 
     private lateinit var underTest: PinsViewModel
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         underTest = PinsViewModel(mockApiClient, mockSharedPrefs, TestDispatchers)
