@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.vitusortner.patterns.networking.ApiClient
+import com.vitusortner.patterns.networking.Response
 import com.vitusortner.patterns.networking.model.Image
 import com.vitusortner.patterns.ui.pins.PinsViewModel.Companion.invoke
 import com.vitusortner.patterns.util.Logger
@@ -32,8 +33,8 @@ class PinsViewModel @VisibleForTesting constructor(
 
     private val log by Logger()
 
-    private val _pins = MutableLiveData<List<Image>>()
-    val pins: LiveData<List<Image>>
+    private val _pins = MutableLiveData<Response<List<Image>>>()
+    val pins: LiveData<Response<List<Image>>>
         get() = _pins
 
     fun fetchPins() {
@@ -43,15 +44,23 @@ class PinsViewModel @VisibleForTesting constructor(
         }
 
         launch {
+            withContext(dispatchers.Main) {
+                _pins.value = Response.Loading()
+            }
+
             try {
                 val response = apiClient.images(token.value).await()
                 val images = response.map { it.image.original }
 
                 withContext(dispatchers.Main) {
-                    _pins.value = images
+                    _pins.value = Response.Success(images)
                 }
             } catch (error: Throwable) {
-                log.w("Error occurred while fetching images.", error)
+//                log.w("Error occurred while fetching images.", error)
+
+                withContext(dispatchers.Main) {
+                    _pins.value = Response.Error(error)
+                }
             }
         }
     }

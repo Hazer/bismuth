@@ -8,15 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vitusortner.patterns.R
 import com.vitusortner.patterns.networking.ApiClient
+import com.vitusortner.patterns.networking.Response
 import com.vitusortner.patterns.observe
 import com.vitusortner.patterns.service.AuthenticationService
 import com.vitusortner.patterns.ui.pins.PinsAdapter
 import com.vitusortner.patterns.ui.pins.PinsViewModel
 import com.vitusortner.patterns.util.ActualPatternsDispatchers
+import com.vitusortner.patterns.util.Logger
 import com.vitusortner.patterns.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val log by Logger()
 
     private val apiClient = ApiClient.instance
 
@@ -46,7 +50,13 @@ class MainActivity : AppCompatActivity() {
 
         authService.onConnect()
 
-        viewModel.pins.observe(this, adapter::submitList)
+        viewModel.pins.observe(this) {
+            when (it) {
+                is Response.Loading -> log.i("Loading")
+                is Response.Success -> adapter.submitList(it.data)
+                is Response.Error -> log.e("Error $it")
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
