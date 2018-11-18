@@ -26,24 +26,26 @@ class PinsViewModel @VisibleForTesting constructor(
     private val dispatchers: PatternsDispatchers
 ) : ViewModel(), CoroutineScope {
 
-    private val job = Job()
+    private val log by Logger()
+
+    private var job: Job? = null
 
     override val coroutineContext: CoroutineContext
-        get() = dispatchers.IO + job
-
-    private val log by Logger()
+        get() = dispatchers.IO
 
     private val _pins = MutableLiveData<Response<List<Image>>>()
     val pins: LiveData<Response<List<Image>>>
         get() = _pins
 
     fun fetchPins() {
+        job?.cancel()
+
         val token = sharedPrefs.token ?: run {
             log.w("Not logged in!")
             return
         }
 
-        launch {
+        job = launch {
             withContext(dispatchers.Main) {
                 _pins.value = Response.Loading
             }
@@ -66,7 +68,7 @@ class PinsViewModel @VisibleForTesting constructor(
     }
 
     override fun onCleared() {
-        job.cancel()
+        job?.cancel()
         super.onCleared()
     }
 
