@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Rule
@@ -76,7 +75,7 @@ class PinsViewModelTest {
         every { mockApiClient.images(testToken.value) } returns CompletableDeferred(testImages.wrap())
 
         underTest.pins.observeForever {
-            it shouldBeInstanceOf Response.Loading::class
+            it shouldEqual Response.Loading
         }
 
         underTest.fetchPins()

@@ -1,8 +1,8 @@
 package com.vitusortner.patterns.networking
 
 @Suppress("unused")
-sealed class Response<out T> {
-    class Loading<out T> : Response<T>()
-    data class Success<out T>(val data: T) : Response<T>()
-    data class Error<out T>(val throwable: Throwable) : Response<T>()
+sealed class Response<out T : Any> {
+    object Loading : Response<Nothing>()
+    data class Success<out T : Any>(val data: T) : Response<T>()
+    data class Error(val throwable: Throwable) : Response<Nothing>()
 }

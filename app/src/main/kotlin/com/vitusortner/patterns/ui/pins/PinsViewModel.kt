@@ -45,7 +45,7 @@ class PinsViewModel @VisibleForTesting constructor(
 
         launch {
             withContext(dispatchers.Main) {
-                _pins.value = Response.Loading()
+                _pins.value = Response.Loading
             }
 
             try {
